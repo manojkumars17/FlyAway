@@ -1,0 +1,835 @@
+                                                              FLYAWAY PROJECT  
+ 
+Submitted by     ManojKumar S
+Date of submission :  01-08-2022 
+ 
+ 
+GIT HUB link  :   
+  https://github.com/manojkumars17/FlyAway.git
+
+Find :  FlyAway Project 
+ 
+ 
+SOURCE CODE:
+Index.jsp :
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>FlyAway</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+
+<div>
+<a href="index.jsp" >Fly Away</a>
+<div >
+<a href="login.jsp"> Admin Login</a>
+</div>
+</div>
+
+
+
+<header >
+<br>
+<div >
+Ready to FlyAway?<br>
+Book International Flight Tickets at best prices
+</div>
+<div>
+<p>
+<br><br>
+<a href="search-portal.jsp"> Book Flights</a>
+</p>
+<p><a href="login.jsp">Admin Login</a></p>
+</div>
+</header>
+<div>
+FlyAway by ManojkumarS
+</div>
+</body>
+</html>
+
+Login.jsp :
+<%@ page import="Servlets.Login"%>
+<% Login.isLoggedIn = false; %>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Admin - Login FlyAway Airlines</title>
+
+</head>
+<body >
+<div >
+<a href="index.jsp" >FlyAway</a>
+<div>
+<a href="login.jsp"> Admin Login</a>
+</div>
+</div>
+<section>
+<section >
+<div >
+<div >
+<h2 ><b>Admin Login</b></h2>
+<br>
+</div>
+</div>
+<section>
+<form action="login" method="post" class="form-container">
+<div>
+<label>Email address</label>
+<input type="email" name="emailEntered" placeholder="Enter email">
+<br>
+<small>&nbsp;&nbsp;Email :<%=Login.email %></small>
+</div>
+<div >
+<label>Password</label>
+<input type="password" name="passwordEntered"  placeholder="Password">
+<br>
+<small> Current Password :&nbsp;<%= Login.password %></small>
+</div>
+<button type="submit"value="Submit">Login</button>
+</form>
+
+</section>
+
+</section>
+</section>
+<div align="center">
+FlyAway by ManojKumarS
+</div>
+</body>
+</html>
+Payment.jsp :
+<%@  page import="Model.Booking"%>
+<%@ page import="Model.Search"%>
+
+<%
+Booking.passenger_name = request.getParameter("pname");
+Booking.passenger_email = request.getParameter("email");
+Booking.passenger_phone = request.getParameter("phone");
+
+if (Booking.passenger_name.equals("") || Booking.passenger_email.equals("") || Booking.passenger_phone.equals("")) {
+out.println("Please enter valid passenger details");
+} else {
+%>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment Details - FlyAway Airlines</title>
+
+</head>
+
+<body>
+<div >
+<a href="index.jsp" >FlyAway</a>
+<div >
+<a href="login.jsp" > Admin Login</a>
+</div>
+</div>
+<section >
+<section >
+<div >
+<div>
+<h1>
+<b>Checkout</b>
+</h1>
+<p ><strong>Enter Payment Details</strong></p>
+<br>
+</div>
+</div>
+<section >
+<form action="${pageContext.request.contextPath}/thank-you.jsp"
+method="post"class="form-container">
+<div >
+<label>Name on Card</label>
+<input type="text" name="name_on_card" placeholder="Enter Name on Card">
+</div>
+<div >
+<label >Card Number</label>
+<input type="number" name="card_details" placeholder="Enter Card Number">
+</div>
+<br>
+<p>
+<span><strong>Total fare = <br>
+<%=Booking.ticket_price%> X <%=Search.persons%>
+persons = Rs.<%=Booking.ticket_price%>
+
+</strong></span>
+</p>
+<button type="submit" value="Submit">Confirm Payment</button>
+</form>
+</section>
+</section>
+</section>
+</body>
+<div class="footer" align="center">FlyAway by ManojKumarS</div>
+</html>
+<%
+}
+%>
+Admin-dashboard.jsp :
+<%@ page import="java.sql.*"%>
+<%@page import="Servlets.Login"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlyAway Airlines</title>
+
+</head>
+
+<body>
+
+
+<div >
+<a href="index.jsp" >FlyAway</a>
+<div >
+<a href="login.jsp" > Admin Login</a>
+</div>
+</div>
+
+
+<%
+if (Login.isLoggedIn) {
+%>
+<div >
+<h2 >
+<b>Admin Dashboard</b>
+</h2>
+
+<p>
+<strong>
+You are LoggedIn as : <%=Login.email%>.
+Your Password is : <%=Login.password%>
+</strong>
+
+</p>
+
+<br>
+<br>
+
+<div>
+<div >
+<form method="post" action="${pageContext.request.contextPath}/change-password.jsp">
+<button type="submit">ChangePassword</button>
+</form>
+
+</div>
+<div >
+<form method="post" action="${pageContext.request.contextPath}/login.jsp">
+<button type="submit">Logout</button>
+</form>
+</div>
+
+</div>
+</div>
+
+<section >
+<section >
+<section>
+
+<table >
+<thead>
+<tr>
+<th >Flight ID</th>
+<th >Name</th>
+<th >Source</th>
+<th >Destination</th>
+<th >Day</th>
+<th >Ticket Price</th>
+</tr>
+</thead>
+<tbody>
+
+<p>Flight Details :</p>
+
+<br>
+
+<%
+String driverName = "com.mysql.cj.jdbc.Driver";
+String connectionUrl = "jdbc:mysql://localhost:3306/Flight";
+String userId = "root";
+String password = "1234567manu";
+
+try {
+Class.forName(driverName);
+System.out.println("connected driver");
+} catch (ClassNotFoundException e) {
+e.printStackTrace();
+}
+
+Connection con = null;
+Statement stmt = null;
+ResultSet res = null;
+
+try {
+con = DriverManager.getConnection(connectionUrl, userId, password);
+stmt = con.createStatement();
+String sql = "SELECT * FROM flight";
+res = stmt.executeQuery(sql);
+System.out.println("executed");
+while (res.next()) {
+%>
+
+<tr>
+<td><%=res.getInt("flight_id")%></td>
+<td><%=res.getString("name")%></td>
+<td><%=res.getString("source")%></td>
+<td><%=res.getString("destination")%></td>
+<td><%=res.getString("days")%></td>
+<td><%=res.getInt("ticket_price") %>
+</td>
+</tr>
+<%
+}
+} catch (Exception e) {
+e.printStackTrace();
+}
+} else {
+out.print("You must Login first");
+}
+%>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<div class="footer" align="center">
+FlyAway by ManojkumarS</div>
+</body>
+</html>
+Booking-details.jsp :
+<%@page import="Model.Booking"%>
+<%
+Booking.flight_booking_id = request.getParameter("flight_id");//flight id
+Booking.ticket_price = request.getParameter("ticket_price");// integer price
+Booking.flight_name = request.getParameter("name"); //flight name
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking Details - FlyAway Airlines</title>
+
+</head>
+
+<body>
+<div >
+<a href="index.jsp">Fly<span>Away</span></a>
+<div >
+<a href="login.jsp" > Admin Login</a>
+</div>
+</div>
+<section >
+<section >
+<div >
+<div >
+<h1>
+<b>Booking Details</b>
+</h1>
+<p>
+<span><strong>Enter Passenger Details</strong></span>
+</p>
+<br>
+</div>
+</div>
+<section>
+<form action="${pageContext.request.contextPath}/payment.jsp"
+method="post"class="form-container">
+<div class="form-group">
+<label for="pname">Passenger Name</label> <input type="text"
+class="form-control" id="pname" name="pname"
+placeholder="Enter name of the/any passenger(s)">
+</div>
+<div class="form-group">
+<label for="email">Email address</label> <input type="email"
+name="email" class="form-control" id="email"
+aria-describedby="emailHelp" placeholder="Enter email">
+</div>
+<div class="form-group">
+<label for="phone">Phone</label> <input type="number"
+class="form-control" id="phone" name="phone"
+placeholder="Enter phone number">
+</div>
+<br>
+<button type="submit" class="btn btn-success btn-block"
+value="Submit">Submit</button>
+</form>
+</section>
+</section>
+</section>
+<div class="footer" align="center">FlyAway by ManojkumarS</div>
+</body>
+</html>
+Change-password.jsp :
+<%@ page import="Servlets.Login"%>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Change Password</title>
+
+</head>
+<body>
+<div >
+<a href="index.jsp">Fly<span
+>Away</span></a>
+<div >
+<a href="/login.jsp" > Admin Login</a>
+</div>
+</div>
+<div >
+<h2>
+<b>New Password<b>
+</h2>
+<br> <br> <br>
+<%if (Login.isLoggedIn) {%>
+<form action="change-password" method="post">
+<div >
+<label>New Password:</label> <br>
+<input type="password" name="passwordEntered" placeholder="Enter a new password">
+<br>
+<small >Current email : &nbsp; <%=Login.email%></small><br>
+<small >Current Password :&nbsp; <%=Login.password%></small>
+</div>
+<button type="submit" >Change Password</button>
+</form>
+<%
+} else {
+out.print("You must Login first");
+}
+%>
+</div>
+<div class="footer" align="center">FlyAway by ManojKumarS</div>
+</body>
+</html>
+Search-result.jsp :
+<%@page import="java.sql.*"%>
+<%@ page import="Model.Search"%>
+
+<%
+String driverName = "com.mysql.cj.jdbc.Driver";
+
+String connectionUrl = "jdbc:mysql://localhost:3306/flight";
+String userId = "root";
+String password = "12334567manu";
+
+String query = Search.getQuery();
+try {
+Class.forName(driverName);
+} catch (ClassNotFoundException e) {
+e.printStackTrace();
+}
+Connection connection = null;
+Statement statement = null;
+ResultSet resultSet = null;
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search Results - FlyAway Airlines</title>
+
+</head>
+
+<body>
+<div >
+<a href="index.jsp" >FlyAway</a>
+<div >
+<a href="login.jsp" > Admin Login</a>
+</div>
+</div>
+<div >
+<h1 >
+<strong>Search Results</strong>
+</h1>
+<p>
+Showing available flights from : <br>
+<%=Search.source%> to <%=Search.destination%> <br>
+Date of travel : <%=Search.date%> (<%=Search.day%>) <br>
+No of travellers : <%=Search.persons%> <br>
+</p>
+
+
+<table >
+
+<thead>
+<tr>
+<th >ID</th>
+<th >Flight</th>
+<th>Source</th>
+<th >Destination</th>
+<th>Date</th>
+<th >Ticket Price</th>
+<th >Select</th>
+</tr>
+</thead>
+
+<tbody>
+
+<br>
+
+<p >
+<strong>Select a flight </strong>
+</p>
+
+<br>
+
+<%
+try {
+connection = DriverManager.getConnection(connectionUrl, userId, password);
+statement = connection.createStatement();
+resultSet = statement.executeQuery(query);
+while (resultSet.next()) {
+%>
+<tr>
+<td><%=resultSet.getString("flight_id")%></td>
+<td><%=resultSet.getString("name")%></td>
+<td><%=resultSet.getString("source")%></td>
+<td><%=resultSet.getString("destination")%></td>
+<td><%=Search.date%></td>
+<td><%=resultSet.getString("ticket_price")%></td>
+<td>
+
+<form
+action="${pageContext.request.contextPath}/booking-details.jsp"
+method="post">
+
+<input type="hidden"name="name" value=" <%=resultSet.getString("name")%>">
+<input type="hidden" name="ticket_price" value=" <%=resultSet.getString("ticket_price")%>">
+<input type="hidden" name="flight_id" value=" <%=resultSet.getString("flight_id")%>">
+<input type="submit" value="Book This Flight">
+</form>
+</td>
+</tr>
+<%
+}
+} catch (Exception e) {
+e.printStackTrace();
+}
+%>
+</tbody>
+</table>
+</div>
+<div align="center">FlyAway by ManojKumars</div>
+</body>
+</html>
+
+Search-portal.jsp:
+<%@page contentType="text/html;charset=UTF-8" language="java"%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlyAway</title>
+
+
+</head>
+<body>
+<div >
+<a href="index.jsp" >FlyAway</a>
+<div>
+<a href="login.jsp" > Admin Login</a>
+</div>
+
+
+
+
+</div>
+<section>
+<section >
+<div >
+<div >
+<h2 >
+<b> Ticket Booking <b>
+</h2>
+<br>
+</div>
+</div>
+<section >
+<form action="search" > <!-- Servlets -->
+<div >
+<label for="date">Date</label>
+<input type="date" name="date" placeholder="Travel Date..">
+</div>
+<div >
+<label for="source">Source</label>
+<select name="source">
+<option value="India">India</option>
+<option value="USA">USA</option>
+<option value="UK">UK</option>
+</select>
+</div>
+<div >
+<label for="destination">Destination</label>
+<select name="destination">
+<option value="USA">USA</option>
+<option value="UK">UK</option>
+<option value="India">India</option>
+</select>
+</div>
+<div>
+<label for="persons">No of Persons</label>
+<select name="persons">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+</select>
+</div>
+<br>
+<button type="submit"  value="Submit">Search Flights</button>
+</form>
+
+</section>
+</section>
+</section>
+<div class="footer" align="center">FlyAway by ManojkumarS</div>
+</body>
+</html>
+Thankyou.jsp:
+<%@  page import="Model.Search"%>
+<%@ page import="Model.Booking"%>
+<%
+
+Booking.name_on_card = request.getParameter("name_on_card");
+Booking.card_details = request.getParameter("card_details");
+
+if ( Booking.name_on_card.equals("") || Booking.card_details.equals("")) {
+out.println("Please enter valid card details");
+}
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thank You - FlyAway Airlines</title>
+</head>
+
+<body>
+<div >
+<a href="index.jsp">FlyAway</a>
+
+<div >
+<a href="login.jsp" >Admin Login</a>
+</div>
+</div>
+<div >
+<h1 >
+<strong>THANK YOU </strong>
+</h1>
+
+<p>
+<strong>Your ticket has been booked. <br>
+The summary/details are as follows  <br>
+</strong>
+</p>
+<p>
+<button onclick="window.print()">Print Ticket</button>
+</p>
+<br>
+<h3>Ticket Summary :</h3><br>
+
+<h3>
+<strong>Traveling :</strong>&nbsp; <%=Search.source%> To <%=Search.destination%> <br> <br>
+<strong>Date :</strong> &nbsp; <%=Search.date%><br><br>
+<strong>Day:</strong>&nbsp;<%=Search.day%><br><br>
+<strong>Booking ID :</strong>&nbsp;<%=Booking.flight_booking_id%><br><br>
+<strong>Flight Name :</strong>&nbsp;<%=Booking.flight_name%><br><br>
+<strong>People :</strong> &nbsp;<%=Search.persons%>
+</h3>
+
+<br>
+<br>
+<h3>
+<strong>Passenger Summary : </strong>
+</h3>
+
+<h3>
+<strong>Name:</strong> &nbsp;
+<%=Booking.passenger_name%><br> <br>
+<strong> Email :</strong>&nbsp;
+<%=Booking.passenger_email%><br> <br>
+<strong>Phone No :</strong> &nbsp;
+<%=Booking.passenger_phone%><br><br>
+</h3>
+<br>
+<h3>
+<strong>Payment Summary : </strong>
+</h3>
+<h4>
+<strong>Payment By:</strong>&nbsp; <%=Booking.name_on_card%><br><br>
+<strong>Card No:</strong>&nbsp; <%=Booking.card_details%>
+</h4>
+<br>
+<h2>
+<strong>Total Paid:&nbsp;
+Rs.<%=Booking.ticket_price%>
+</strong>
+</h2>
+<br>
+<br>
+</div>
+
+<div align="center">FlyAway by Manojkumar S</div>
+
+</body>
+</html>
+
+Booking.java
+package Model;
+
+public class Booking {
+
+// flight details
+public static String flight_booking_id;
+public static String ticket_price;
+public static String flight_name;
+
+
+
+// Booking  details
+public static String passenger_name;
+public static String passenger_email;
+public static String passenger_phone;
+
+// payment details
+public static String name_on_card;
+public static String card_details;
+
+
+}
+ChangePassword.java:
+package Servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+public class ChangePassword extends HttpServlet {
+
+@Override
+protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws IOException {
+PrintWriter out = resp.getWriter();
+String pass = req.getParameter("passwordEntered");
+if (!Login.isLoggedIn){
+out.println("You must login first");
+}
+else if (pass.equals("")){
+out.println("Password can't be empty");
+}
+else if (Login.isLoggedIn && !pass.equals("")){
+Login.password = pass;
+out.println("Password changed. New Password is "+Login.password);
+}
+else {
+out.println("Sorry, Something went wrong");
+}
+out.close();
+}
+}
+Search.java:
+package Model;
+
+public class Search {
+public static String date;
+public static String day; //database
+public static String source;//databse
+public static String destination;//database
+public static int persons; // 1,2,3,4,5,6,
+
+public static String getQuery() {
+return
+"SELECT * FROM FLIGHT WHERE source = '"+source+"' AND destination= '"+destination+"' AND days like '%"+day+"%'";
+}
+Login.java:
+package Servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Login extends HttpServlet {
+public static boolean isLoggedIn = false;
+public static String email = "manuhunt@gmail.com";
+public static String password = "manu";
+
+@Override
+public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+PrintWriter out = resp.getWriter();
+
+String emai = req.getParameter("emailEntered");
+String pass = req.getParameter("passwordEntered");
+
+if (emai.equals(Login.email) && pass.equals(Login.password)) {
+isLoggedIn = true;
+resp.sendRedirect("admin-dashboard.jsp");
+} else {
+isLoggedIn = false;
+out.println("Login Failed : Incorrect email or Password");
+}
+out.close();
+}
+}
+SearchServlet.java:
+package Servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import Model.Search;
+
+
+public class SearchServlet extends HttpServlet {
+
+@Override
+public void service (HttpServletRequest req, HttpServletResponse resp) throws IOException {
+Search.date = req.getParameter("date");
+Search.source = req.getParameter("source");
+Search.destination = req.getParameter("destination");
+Search.persons = Integer.parseInt(req.getParameter("persons"));
+
+if (Search.date.equals("")) {
+PrintWriter out = resp.getWriter();
+out.println("Please enter a valid date");
+}
+else {
+Search.day = getDay(Search.date);
+resp.sendRedirect("search-results.jsp");
+}
+}
+
+public String getDay(String dateInp) {
+LocalDate dt = LocalDate.parse(dateInp);
+return dt.getDayOfWeek().toString();
+}
+}
+
